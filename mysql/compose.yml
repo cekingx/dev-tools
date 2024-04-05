@@ -1,0 +1,11 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root13
+      MYSQL_USER: cekingx
+      MYSQL_PASSWORD: root13
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./storage:/var/lib/mysql

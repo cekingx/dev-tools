@@ -1,0 +1,44 @@
+services:
+  zookeeper:
+    container_name: kafka-zookeeeper
+    image: zookeeper:latest  # Use a reliable Zookeeper image
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 1
+    expose:
+      - "2181"
+
+  kafka:
+    container_name: kafka-core
+    image: confluentinc/cp-kafka:latest  # Use a maintained Kafka image (adjust if needed)
+    ports:
+      - "9092:9092"
+    expose:
+      - "9092"
+      - "9093"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka-core
+      KAFKA_LISTENERS: PLAINTEXT://:9092,INSIDE://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:9092,INSIDE://:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,INSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeeper:2181"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_GROUP_COORDINATOR_NEW_ENABLE: 'true'
+    depends_on:
+      - zookeeper
+
+  kouncil:
+    container_name: kafka-kouncil
+    image: consdata/kouncil:latest
+    ports:
+      - "8080:8080"  # Expose Kouncil on port 80
+    depends_on:
+      - kafka
+    environment:
+      bootstrapServers: "kafka:9093"
+      kouncil.auth.active-provider: "inmemory"
