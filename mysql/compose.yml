@@ -1,12 +1,22 @@
 services:
   mysql:
+    container_name: local-mysql
     image: mysql:8.0
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root13
       MYSQL_USER: cekingx
       MYSQL_PASSWORD: root13
+    networks:
+      - backend-network
+      - staging-network
     ports:
       - "3306:3306"
     volumes:
       - ./storage:/var/lib/mysql
+
+networks:
+  backend-network:
+    external: true
+  staging-network:
+    external: true
