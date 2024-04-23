@@ -19,6 +19,7 @@ services:
     image: confluentinc/cp-kafka:latest  # Use a maintained Kafka image (adjust if needed)
     ports:
       - "9092:9092"
+      - "9094:9094"
     expose:
       - "9092"
       - "9093"
