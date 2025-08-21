@@ -1,0 +1,21 @@
+services:
+  ubuntu:
+    image: ubuntu:18.04
+    container_name: ubuntu
+    restart: always
+    networks:
+      - staging-network
+      - backend-network
+      - frontend-network
+    tty: true
+
+networks:
+  staging-network:
+    driver: bridge
+    name: staging-network
+  backend-network:
+    driver: bridge
+    name: backend-network
+  frontend-network:
+    driver: bridge
+    name: frontend-network
