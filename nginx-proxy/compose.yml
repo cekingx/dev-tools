@@ -8,7 +8,7 @@ services:
       - '81:81'
       - '443:443'
     volumes:
-      - ./data:/data
+      - ./storage:/data
       - ./letsencrypt:/etc/letsencrypt
     extra_hosts:
       - "host.docker.internal:host-gateway"

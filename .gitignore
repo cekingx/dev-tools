@@ -1,3 +1,4 @@
 **/storage/
 nginx-proxy/data
 nginx-proxy/letsencrypt/accounts/acme-v02.api.letsencrypt.org/directory/9f2d548f6cbb169b1bbb7614ced2b5ea
+nginx-proxy/letsencrypt
