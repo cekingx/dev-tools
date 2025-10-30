@@ -18,7 +18,8 @@ dev-tools/
 ├── portainer/      # Docker container management UI
 ├── postgres/       # PostgreSQL 14 database
 ├── redis/          # Redis cache/data store
-└── registry/       # Local Docker image registry
+├── registry/       # Local Docker image registry
+└── sonarqube/      # SonarQube Community Edition code analysis
 ```
 
 ## Services Overview
@@ -126,6 +127,43 @@ dev-tools/
   # Access admin UI at http://localhost:81
   ```
 
+### Code Quality & Analysis
+
+#### SonarQube Community Edition
+- **Image**: `sonarqube:community`
+- **Port**: `9000`
+- **Access**: http://localhost:9000
+- **Default Credentials**:
+  - Username: `admin`
+  - Password: `admin` (must change on first login)
+- **Database**: PostgreSQL 15 (included in compose file)
+  - Internal credentials: `sonarqube` / `sonarqube`
+- **Purpose**: Continuous code quality and security analysis
+- **Data**: Persisted in `sonarqube/storage/`
+  - `sonarqube_data/` - Analysis results and settings
+  - `sonarqube_logs/` - Application logs
+  - `sonarqube_extensions/` - Plugins and extensions
+  - `postgresql_data/` - Database files
+- **Usage**:
+  ```bash
+  cd sonarqube
+  # Create storage directories with proper permissions (first time only)
+  mkdir -p storage/{sonarqube_data,sonarqube_logs,sonarqube_extensions,postgresql_data}
+  chmod -R 777 storage
+  # Start services
+  docker compose up -d
+  # Wait 1-2 minutes for initialization
+  # Access at http://localhost:9000
+  # First login: admin/admin (change password immediately)
+  ```
+- **Important Notes**:
+  - First startup may take 2-3 minutes to initialize database
+  - Requires at least 2GB RAM for optimal performance
+  - Storage directories need 777 permissions due to different container users (UID 70 for PostgreSQL, UID 1000 for SonarQube)
+  - If you encounter permission errors, run: `docker run --rm -v "$(pwd)/storage:/data" alpine chmod -R 777 /data`
+  - Change default admin password immediately after first login
+  - Use for analyzing code quality, security vulnerabilities, and code smells
+
 ### Networking
 
 #### Network Infrastructure
@@ -158,6 +196,7 @@ cd kafka && docker compose up -d && cd ..
 cd registry && docker compose up -d && cd ..
 cd portainer && docker compose up -d && cd ..
 cd nginx-proxy && docker compose up -d && cd ..
+cd sonarqube && docker compose up -d && cd ..
 ```
 
 ### Start Specific Service
@@ -205,6 +244,7 @@ networks:
 | Portainer | https://localhost:9443 | Container management UI |
 | Nginx Proxy Manager | http://localhost:81 | Proxy admin UI |
 | Docker Registry | `localhost:5000` | Image registry |
+| SonarQube | http://localhost:9000 | Code quality analysis |
 
 ## Data Persistence
 
