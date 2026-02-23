@@ -17,6 +17,7 @@ dev-tools/
 ├── nginx-proxy/    # Nginx Proxy Manager with Let's Encrypt
 ├── portainer/      # Docker container management UI
 ├── postgres/       # PostgreSQL 14 database
+├── rabbitmq/       # RabbitMQ message broker with Management UI
 ├── redis/          # Redis cache/data store
 ├── registry/       # Local Docker image registry
 └── sonarqube/      # SonarQube Community Edition code analysis
@@ -127,6 +128,22 @@ dev-tools/
   # Access admin UI at http://localhost:81
   ```
 
+#### RabbitMQ
+- **Image**: `rabbitmq:4-management`
+- **Ports**:
+  - `5672` (AMQP)
+  - `15672` (Management UI)
+- **Access**: http://localhost:15672
+- **Default Credentials**: `guest` / `guest`
+- **Purpose**: Message broker for async communication between services
+- **Data**: Persisted in `rabbitmq/storage/`
+- **Networks**: Connected to `backend-network`
+- **Usage**:
+  ```bash
+  cd rabbitmq && docker compose up -d
+  # Access management UI at http://localhost:15672
+  ```
+
 ### Code Quality & Analysis
 
 #### SonarQube Community Edition
@@ -193,6 +210,7 @@ cd mysql && docker compose up -d && cd ..
 cd postgres && docker compose up -d && cd ..
 cd redis && docker compose up -d && cd ..
 cd kafka && docker compose up -d && cd ..
+cd rabbitmq && docker compose up -d && cd ..
 cd registry && docker compose up -d && cd ..
 cd portainer && docker compose up -d && cd ..
 cd nginx-proxy && docker compose up -d && cd ..
@@ -241,6 +259,7 @@ networks:
 | Redis | `localhost:6379` | Cache connection |
 | Kafka | `localhost:9094` | External broker connection |
 | Kouncil | http://localhost:8080 | Kafka management UI |
+| RabbitMQ | http://localhost:15672 | RabbitMQ management UI |
 | Portainer | https://localhost:9443 | Container management UI |
 | Nginx Proxy Manager | http://localhost:81 | Proxy admin UI |
 | Docker Registry | `localhost:5000` | Image registry |
