@@ -7,6 +7,7 @@ services:
       - staging-network
       - backend-network
       - frontend-network
+      - dev-net
     tty: true
 
 networks:
@@ -19,3 +20,6 @@ networks:
   frontend-network:
     driver: bridge
     name: frontend-network
+  dev-net:
+    driver: bridge
+    name: dev-net
