@@ -9,3 +9,9 @@ services:
       - "5432:5432"
     volumes:
       - ./storage:/var/lib/postgresql/data
+    networks:
+      - dev-net
+
+networks:
+  dev-net:
+    external: true
