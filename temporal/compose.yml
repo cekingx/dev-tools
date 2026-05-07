@@ -2,6 +2,7 @@ services:
   postgresql:
     image: postgres:18
     container_name: temporal-postgresql
+    restart: unless-stopped
     ports:
       - "5433:5432"
     environment:
@@ -42,6 +43,7 @@ services:
   temporal:
     image: temporalio/server:1.28.4
     container_name: temporal
+    restart: unless-stopped
     depends_on:
       temporal-admin-tools:
         condition: service_completed_successfully
@@ -86,6 +88,7 @@ services:
   temporal-ui:
     image: temporalio/ui:2.48.2
     container_name: temporal-ui
+    restart: unless-stopped
     depends_on:
       temporal:
         condition: service_healthy
